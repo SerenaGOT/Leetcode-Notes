@@ -57,3 +57,65 @@ public:
 };
 ```
 
+
+
+##  59. Spiral Matrix II
+
+## 问题描述
+
+Given a positive integer *n*, generate a square matrix filled with elements from 1 to *n*2 in spiral order.
+
+**Example:**
+
+```
+Input: 3
+Output:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+```
+
+
+
+## 代码
+
+```c++
+// 本题主要考虑边界条件，不难总体
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> res(n,vector<int>(n,0)); //初始化vector的方法
+        int row = n-1,col=n-1;
+        int x = 0, y=0;
+        int value = 1;
+        while(true){
+            if(x>col) return res;
+            else if(x==col){
+                res[x][x] = value;
+                return res;
+            }
+                
+            for(int i=y;i<=col;i++){  // to right
+                res[x][i] = value++;
+            }
+            for(int i=x+1;i<=row;i++){
+                res[i][col] = value++;
+            }
+            for(int i=col-1;i>=x;i--){
+                res[row][i] = value++;
+            }
+            for(int i=row-1;i>y;i--){
+                res[i][x] = value++;
+            }
+            x++;
+            y++;
+            col--;
+            row--;
+        }
+        return res;
+    }
+};
+```
+

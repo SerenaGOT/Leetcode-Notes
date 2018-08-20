@@ -1,3 +1,5 @@
+
+
 # Array 类题目
 
 ## 79. Word Search
@@ -143,6 +145,7 @@ Explanation: The sum of 2 and 7 is 9. Therefore index1 = 1, index2 = 2.
 ```
 
 ```c++
+//解法
 // 简单的贪心算法
 class Solution {
 public:
@@ -165,6 +168,59 @@ public:
         }
         if(numbers[start]+numbers[end]==target)
             return solution;
+    }
+};
+```
+
+
+
+## 55. Jump Game
+
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+**Example 1:**
+
+```
+Input: [2,3,1,1,4]
+Output: true
+Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+
+```
+
+**Example 2:**
+
+```c++
+Input: [3,2,1,0,4]
+Output: false
+Explanation: You will always arrive at index 3 no matter what. Its maximum
+             jump length is 0, which makes it impossible to reach the last index.
+```
+
+解法：
+
+```c++
+//有点动态规划的意思
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int len=nums.size();
+        int maxq=0; // 最多能去到的位置
+        int i=0;
+        while(i<=maxq&&i<=len-1)
+        {
+      
+            maxq=max(nums[i]+i,maxq); // 当前位置+能走步数，与当前最大能走步数相比，取最大值
+           if(i>=len-1)
+                return true;
+            if(maxq-i<=0)  //如果最大能走步数不能大于i，则失败
+                return false;
+             i++;
+        }
+        
     }
 };
 ```

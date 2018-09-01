@@ -145,3 +145,79 @@ public:
 };
 ```
 
+### 278. First Bad Version
+
+You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all the versions after a bad version are also bad.
+
+Suppose you have `n` versions `[1, 2, ..., n]` and you want to find out the first bad one, which causes all the following ones to be bad.
+
+You are given an API `bool isBadVersion(version)` which will return whether `version` is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.
+
+**Example:**
+
+```
+Given n = 5, and version = 4 is the first bad version.
+
+call isBadVersion(3) -> false
+call isBadVersion(5) -> true
+call isBadVersion(4) -> true
+
+Then 4 is the first bad version. 
+```
+
+
+
+- 解法（迭代）
+
+```c++
+// Forward declaration of isBadVersion API.
+bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int start = 1,end = n,mid;
+        while(start<end){
+            mid = start+(end-start)/2;
+            if(!isBadVersion(mid)) start = mid+1;
+            else
+                end = mid;// 因为mid位置也是bool=1，所以要包含到下一次迭代
+        }
+        return start;
+    }
+    
+};
+```
+
+- 解法（递归，java）
+
+```java
+public int firstBadVersion(int n) {
+    
+    if(n==0) {
+        return 0;
+    }
+
+   return helper(n,1,n);
+}
+
+
+public int helper(int n, int start, int end) {
+    
+    if(start>=end) {
+        return start;
+    }
+    int middle = start+(end-start)/2;
+    
+    if(isBadVersion(middle)) {
+        return helper(n,start,middle);
+    } else {
+        return helper(n,middle+1,end);
+        
+    }
+}
+}
+```
+
+
+

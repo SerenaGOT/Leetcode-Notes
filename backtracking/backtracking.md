@@ -301,3 +301,59 @@ public:
 };
 ```
 
+
+
+
+
+## 51 n-queens
+
+- n皇后问题，注意检查每一层的皇后是否符合的时候，不需要遍历下面的皇后，只需要检查上半部分的就可以了，一层循环遍历col，row可以通过递归实现遍历，不需要多一个for循环
+
+```c++
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        string o = "";
+        for(int i=0;i<n;i++)
+            o+=".";
+        vector<string> origin(n,o);
+        vector<vector<string>> res;
+        solve(res,origin,0,n);
+        return res;
+    }
+    void solve(vector<vector<string>> &res, vector<string>& origin, int row,int n){
+        if(row==n){
+            res.push_back(origin);
+            return;
+        }
+        for(int j=0;j<n;j++){
+            if(checkcol(origin,row,j) && checkdiag(origin,row,j)){
+                    origin[row][j] = 'Q';
+                    solve(res,origin,row+1,n);
+                    origin[row][j] = '.';
+            }   
+        }
+    }
+   
+    bool checkcol(vector<string>& origin, int row, int col){
+        for(int i=0;i<origin.size();i++){
+            if(origin[i][col]=='Q')
+                return false;       
+        }
+        return true;
+    }
+    bool checkdiag(vector<string>& origin, int row, int col){
+        int tmpr=row,tmpc=col;
+        for(int i=row,j=col;i>=0 && j>=0;i--,j--){
+            if(origin[i][j]=='Q')
+                return false; 
+        }
+        for(int i=row,j=col;j<origin.size() && i>=0;i--,j++){
+            if(origin[i][j]=='Q')
+                return false; 
+        }
+        return true;
+    }
+};
+```
+

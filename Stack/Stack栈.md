@@ -42,7 +42,6 @@ Explanation:
 = (0 + 17) + 5
 = 17 + 5
 = 22
-
 ```
 
 
@@ -219,5 +218,80 @@ class Solution {
         return s;
     }
 }
+```
+
+
+
+## 230 Kth Smallest Element in a BST
+
+Given a binary search tree, write a function `kthSmallest` to find the **k**th smallest element in it.
+
+**Note: **
+You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+
+**Example 1:**
+
+```
+Input: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+Output: 1
+```
+
+**Example 2:**
+
+```
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Output: 3
+```
+
+
+
+- 解法：本题需要用到stack后进先出的功能，先找出tree左侧的全部值，pop从leaf向root弹出，然后每个弹出节点再放入其右边的节点，即其次大的值，对于每个右边的点，再次探索其左侧子叶的值
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void find_left(TreeNode * root,stack<TreeNode*>& st){
+        while(root){
+            st.push(root);
+            root=root->left;
+        }
+    }
+    int kthSmallest(TreeNode * root, int k) {
+        // write your code here
+        stack<TreeNode*> st;
+        TreeNode * tmp = root;
+        find_left(tmp,st);
+        while(!st.empty()){
+            TreeNode* t = st.top();
+            if(--k==0)
+                return t->val;
+            st.pop();
+            find_left(t->right,st);
+            
+        }
+        return 0;
+    }
+};
 ```
 

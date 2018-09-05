@@ -225,3 +225,104 @@ public:
 };
 ```
 
+
+
+## 80 Remove Duplicates from Sorted Array II
+
+Given a sorted array *nums*, remove the duplicates [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm) such that duplicates appeared at most *twice* and return the new length.
+
+Do not allocate extra space for another array, you must do this by **modifying the input array in-place** with O(1) extra memory.
+
+**Example 1:**
+
+```
+Given nums = [1,1,1,2,2,3],
+
+Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
+
+It doesn't matter what you leave beyond the returned length.
+```
+
+**Example 2:**
+
+```
+Given nums = [0,0,1,1,1,1,2,3,3],
+
+Your function should return length = 7, with the first seven elements of nums being modified to 0, 0, 1, 1, 2, 3 and 3 respectively.
+
+It doesn't matter what values are set beyond the returned length.
+
+```
+
+**Clarification:**
+
+Confused why the returned value is an integer but your answer is an array?
+
+Note that the input array is passed in by **reference**, which means modification to the input array will be known to the caller as well.
+
+Internally you can think of this:
+
+```
+// nums is passed in by reference. (i.e., without making a copy)
+int len = removeDuplicates(nums);
+
+// any modification to nums in your function would be known by the caller.
+// using the length returned by your function, it prints the first len elements.
+for (int i = 0; i < len; i++) {
+    print(nums[i]);
+}
+```
+
+
+
+- 解法
+  - 这种题都可以考虑在同个数组遍历的时候，后面的元素直接覆盖重复元素的位置
+
+```c++
+\\需要考虑到前面遍历过的元素不需要再使用，所以可以直接覆盖
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int i=0;
+        for(int num:nums){
+            if(i<2 || num>nums[i-2]){
+                nums[i++] = num;
+            }
+        }
+        return i;
+    }
+};
+```
+
+
+
+
+
+# 817. Range Sum Query 2D - Mutable
+
+Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2).
+
+1. The matrix is only modifiable by the update function.
+2. You may assume the number of calls to update and sumRegion function is distributed evenly.
+3. You may assume that row1 ≤ row2 and col1 ≤ col2.
+
+### Example
+
+```
+Given matrix = [
+  [3, 0, 1, 4, 2],
+  [5, 6, 3, 2, 1],
+  [1, 2, 0, 1, 5],
+  [4, 1, 0, 1, 7],
+  [1, 0, 3, 0, 5]
+]
+
+sumRegion(2, 1, 4, 3) -> 8
+update(3, 2, 2)
+sumRegion(2, 1, 4, 3) -> 10
+```
+
+
+
+- 解法：因为如果每次求和都要重新加全部的和会导致超时，所以可以先用一个矩阵储存每一列中0行到j行的和，那么每次计算矩阵的和的时候只需要进行col2-col1次减法就可以得到结果，复杂度从O(n^2)降到了O(n)
+

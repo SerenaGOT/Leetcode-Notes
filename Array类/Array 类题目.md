@@ -326,3 +326,53 @@ sumRegion(2, 1, 4, 3) -> 10
 
 - 解法：因为如果每次求和都要重新加全部的和会导致超时，所以可以先用一个矩阵储存每一列中0行到j行的和，那么每次计算矩阵的和的时候只需要进行col2-col1次减法就可以得到结果，复杂度从O(n^2)降到了O(n)
 
+```c++
+class NumMatrix {
+public:
+    NumMatrix(vector<vector<int>> matrix) {
+        m.resize(matrix.size(),vector<int>(matrix[0].size()));
+        sum.resize(matrix.size(),vector<int>(matrix[0].size()));
+        if(matrix.size()!=0){
+            for(int j=0;j<matrix[0].size();j++){
+                for(int i=0;i<matrix.size();i++){
+                    m[i][j] = matrix[i][j];
+                    if(i==0)
+                        sum[i][j] = matrix[i][j];
+                    else
+                        sum[i][j] = sum[i-1][j]+matrix[i][j];
+                }
+            }
+        }
+    }
+    
+    void update(int row, int col, int val) {
+        int dif = m[row][col] - val;
+        m[row][col] = val;
+        for(int r=row;r<sum.size();r++){
+            sum[r][col]-=dif;
+        }
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        int res = 0;
+        for(int i=col1;i<=col2;i++){
+            if(row1>0)
+                res+= sum[row2][i] - sum[row1-1][i];
+            else
+                res+= sum[row2][i];
+        }
+        return res;
+    }
+private:
+    vector<vector<int>> sum;
+    vector<vector<int>> m;
+};
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix obj = new NumMatrix(matrix);
+ * obj.update(row,col,val);
+ * int param_2 = obj.sumRegion(row1,col1,row2,col2);
+ */
+```
+
